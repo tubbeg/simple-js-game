@@ -1,3 +1,4 @@
+"use strict";
 import {Scene,Game, GameObjects, ANIMATION_STOP} from "phaser"
 import {createConfig} from "./config.js"
 
@@ -32,6 +33,33 @@ class GhostSprite extends GameObjects.Sprite {
 
 }
 
+
+
+function addGhostJump (sceneInput, sprite){
+
+    sprite.play({ key: "normal", repeat: -1 });
+    sceneInput.on("pointerup", (e) => { sprite.setVelocityY(-200);});
+    sceneInput.on("pointerdown", (e) => {
+        sprite
+            .play({ key: "jump", frameRate: 2 })
+            .once(Phaser.Animations.Events.ANIMATION_COMPLETE, () =>
+            {
+                sprite.play({ key: "normal", repeat: -1 });
+            });
+    });
+}
+
+
+
+function addGhostSprite(objFactory, anims, sceneInput){
+    
+    anims.createFromAseprite("ghost");
+    const spr = objFactory.sprite(400, 300, "ghost");
+    addGhostJump(sceneInput,spr);
+    return spr;
+}
+
+
 class PlayerScene extends Scene
 {
     preload ()
@@ -42,22 +70,7 @@ class PlayerScene extends Scene
 
     create ()
     {
-        this.anims.createFromAseprite("ghost");
-        //const ghost = new GhostSprite(this,400,300);
-        //this.sprite = this.add.existing(ghost);
-        
-        this.sprite = this.add.sprite(400, 300, "ghost");
-        this.sprite.play({ key: "normal", repeat: -1 });
-        this.input.on("pointerdown", (e) =>
-        {
-            this.sprite
-                .play({ key: "jump", frameRate: 5 })
-                .once(Phaser.Animations.Events.ANIMATION_COMPLETE, () =>
-                {
-                    this.sprite.play({ key: "normal", repeat: -1 });
-                });
-        });
-        
+        this.sprite = addGhostSprite(this.physics.add, this.anims, this.input);
     }
 
     update (t,dt){
