@@ -8,6 +8,7 @@ export const createConfig = (scenes) =>
         width: 800,
         height: 600,
         scene: scenes,
+         pixelArt: true,
         physics: {
             default: 'arcade',
             arcade: {
