@@ -6,18 +6,20 @@ import {createConfig} from "./config.js"
 const h = "hello";
 
 console.log(h,h,h);
-
+///*
 class Example extends Scene
 {
     preload ()
     {
-
-        this.load.image("ghost", "./spookily.png");
+        this.load.aseprite("ghost", "spookily.png", "spookily.json");
+        //this.load.image("ghost", "./spookily.png");
     }
 
     create ()
     {
-        this.add.image(400, 300, "ghost");
+        this.anims.createFromAseprite("ghost");
+        this.sprite = this.add.sprite(400, 300, "ghost");
+        this.sprite.play({ key: "jump", repeat: -1 });
     }
 }
 
