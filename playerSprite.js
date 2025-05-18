@@ -3,6 +3,8 @@
 function addGhostJump (sceneInput, sprite){
 
     sprite.play({ key: "normal", repeat: -1 });
+    //sprite.setInteractive();
+    sprite.body.onCollide = true;
     sceneInput.on("pointerup", (e) => { sprite.setVelocityY(-200);});
     sceneInput.on("pointerdown", (e) => {
         sprite
@@ -17,7 +19,7 @@ function addGhostJump (sceneInput, sprite){
 function addGhostSprite(objFactory, anims, sceneInput){
     
     anims.createFromAseprite("ghost");
-    const spr = objFactory.sprite(400, 300, "ghost");
+    const spr = objFactory.sprite(400, 100, "ghost");
     addGhostJump(sceneInput,spr);
     return spr;
 }

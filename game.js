@@ -10,6 +10,7 @@ const h = "hello";
 console.log(h,h,h);
 
 function runGame (conf){
+    console.log("Running game...");
     const g = new Game(conf);
 }
 
