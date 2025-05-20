@@ -10,8 +10,10 @@ function addCastle (objFactory, sprite, physicsWorld){
     physicsWorld.on('collide', (go1, go2, b1, b2) =>
     {
         console.log("ghost is dead :/");
-        sprite.play({ key: "dead", frameRate: 2 });
-        go2.setAlpha(0.5);
+        sprite.setData("alive", "false");
+        sprite.play({ key: "dead"});
+        sprite.body.setCollidesWith([]);
+        castle.setAlpha(0.5);
     });
     return castle;
 }
