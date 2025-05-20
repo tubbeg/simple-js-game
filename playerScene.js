@@ -3,7 +3,8 @@ import {Scene, GameObjects, ANIMATION_STOP} from "phaser"
 import { addGhostSprite } from "./playerSprite.js";
 
 function addCastle (objFactory, sprite, physicsWorld){
-    const castle = objFactory.image(400,400, "dark_castle").setScale(3,3);
+    const castle = objFactory.image(800,400, "dark_castle").setScale(3,3);
+    castle.setVelocityX(-100);
     castle.body.setAllowGravity(false);
     castle.body.setImmovable();
     objFactory.collider(sprite, castle);
