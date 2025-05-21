@@ -1,26 +1,19 @@
 "use strict";
 import {Scene, GameObjects, ANIMATION_STOP} from "phaser"
 import { addGhostSprite } from "./playerSprite.js";
+import { addCastle, castleIsOutOfBounds } from "./castleSprite.js";
 
-function addCastle (objFactory, sprite, physicsWorld){
-    const castle = objFactory.image(800,400, "dark_castle").setScale(3,3);
-    castle.setVelocityX(-100);
-    castle.body.setAllowGravity(false);
-    castle.body.setImmovable();
-    objFactory.collider(sprite, castle);
-    physicsWorld.on('collide', (go1, go2, b1, b2) =>
-    {
-        console.log("ghost is dead :/");
-        sprite.setData("alive", "false");
-        sprite.play({ key: "dead"});
-        sprite.body.setCollidesWith([]);
-        castle.setAlpha(0.5);
-    });
-    return castle;
+
+function timeToUpdate (t)
+{
+    let d = t % 1000;
+    return (d < 1);
 }
 
 class PlayerScene extends Scene
 {
+
+
     preload ()
     {
         this.load.aseprite("ghost", "spookily.png", "spookily.json");
@@ -29,12 +22,30 @@ class PlayerScene extends Scene
 
     create ()
     {
+        this.towers = [];
         this.sprite = addGhostSprite(this.physics.add, this.anims, this.input);
-        this.castle = addCastle(this.physics.add, this.sprite, this.physics.world);
     }
 
-    update (t,dt){
-        //this.input.key()
+    update (t,dt)
+    {
+        this.towers.filter((tower) => {return (tower == null);});
+
+        this.towers.forEach((tower) =>
+        {
+            if (castleIsOutOfBounds(tower))
+            {
+                console.log("Destroying tower");
+                tower.destroy();
+            }
+        });
+
+        if (this.towers.length < 3 && timeToUpdate(t)){
+            console.log("towers,",this.towers)
+            console.log("Creating tower")
+            let newTower =  addCastle(this.physics.add, this.sprite, this.physics.world);
+            this.towers.push(newTower);
+        }
+
     }
 }
 
