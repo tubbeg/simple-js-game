@@ -1,22 +1,34 @@
 "use strict";
 import {Physics} from "phaser"
 
-function addGhostJump (sceneInput, sprite){
-
-    //sprite.setInteractive();
-    sceneInput.on("pointerup", (e) => { if (ghostIsAlive(sprite)) { sprite.setVelocityY(-200);}});
-    sceneInput.on("pointerdown", (e) => {
-        if (ghostIsAlive(sprite)){
-            sprite
-                .play({ key: "jump", frameRate: 2 })
-                .once(Phaser.Animations.Events.ANIMATION_COMPLETE, () =>
-                {
-                    sprite.play({ key: "normal", repeat: -1 });
-                });
-        }
+//Systems
+function jumpSpritesPos(sprites)
+{
+    sprites.forEach((sprite) => {
+        sprite.sprite.setVelocityY(-200);
     });
 }
 
+function playJump (sprite)
+{
+    sprite
+        .play({ key: "jump", frameRate: 2 })
+        .once(Phaser.Animations.Events.ANIMATION_COMPLETE, () =>
+        {
+            sprite.play({ key: "normal", repeat: -1 });
+        });
+        
+}
+
+function jumpSpritesAnim(sprites)
+{
+    sprites.forEach((sprite) => {
+        playJump(sprite.sprite);
+    });
+}
+
+
+//Components
 function addGhostSprite(objFactory, anims)
 {
     anims.createFromAseprite("ghost");
@@ -27,4 +39,4 @@ function addGhostSprite(objFactory, anims)
 }
 
 
-export { addGhostSprite };
+export { addGhostSprite, jumpSpritesAnim, jumpSpritesPos };

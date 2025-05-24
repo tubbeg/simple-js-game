@@ -1,13 +1,8 @@
 "use strict";
 
 
-function castleIsOutOfBounds (castle){
-    return (castle.inCamera) && (castle.x < 600);
-}
 
-
-
-function addCastle (objFactory, sprite, physicsWorld){
+function addCastle2 (objFactory, sprite, physicsWorld){
     const castle = objFactory.sprite(800,400, "dark_castle").setScale(3,3);
     castle.setVelocityX(-100);
     castle.body.setAllowGravity(false);
@@ -24,5 +19,10 @@ function addCastle (objFactory, sprite, physicsWorld){
     return castle;
 }
 
+function addCastle (objFactory){
+    const castle = objFactory.sprite(800,400, "dark_castle").setScale(3,3);
+    return castle;
+}
 
-export {addCastle, castleIsOutOfBounds};
+
+export {addCastle};
