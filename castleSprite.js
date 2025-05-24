@@ -1,9 +1,11 @@
 "use strict";
 import ECS from 'ecs'
 
+//Systems
 function spawnCastleSystem (w)
 {
-    const ents = ECS.getEntities(w, [ 'tower'])
+    const ents = ECS.getEntities(w, [ 'tower']);
+    const player = ECS.getEntity(w, [ 'sprite']);
     const onUpdate = function (dt)
     {
         if (ents.length < 1)
@@ -11,6 +13,7 @@ function spawnCastleSystem (w)
             const tower = ECS.addEntity(w);
             const f = ECS.getEntity(w, [ 'factory' ]);
             const spr = addCastle(f.factory);
+            f.factory.collider(spr, player.sprite);
             ECS.addComponent(w, tower, 'tower', spr);
             ECS.addComponent(w, tower, 'moving', {moving : false});
         }   
@@ -59,11 +62,15 @@ function moveCastleSystem (w)
 }
 
 
-
+//Components
 function addCastle (objFactory){
     const castle = objFactory.sprite(800,400, "dark_castle").setScale(3,3);
+    //Not all properties need to be added as components
+    //Some things are better to be left for Phaser to handle
     castle.body.setAllowGravity(false);
+    castle.body.setImmovable();
     return castle;
 }
 
+//Exports
 export {spawnCastleSystem, killCastleSystem, moveCastleSystem};

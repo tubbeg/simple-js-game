@@ -1,14 +1,37 @@
 "use strict";
 import {Scene, GameObjects} from "phaser"
-import { addGhostSprite, jumpSpritesAnim, jumpSpritesPos } from "./playerSprite.js"
+import { addGhostSprite,killSpritesAnim, jumpSpritesAnim, jumpSpritesPos } from "./playerSprite.js"
 import { spawnCastleSystem, moveCastleSystem, killCastleSystem } from "./castleSprite.js"
 import ECS from 'ecs'
+/*
+castle.body.setImmovable();
 
+
+
+    objFactory.collider(sprite, castle);
+
+
+    physicsWorld.on('collide', (go1, go2, b1, b2) =>
+
+
+    {
+
+
+        sprite.play({ key: "dead"});
+
+
+        sprite.body.setCollidesWith([]);
+
+
+        castle.setAlpha(0.5);
+
+
+    });*/
 function addObjFactory(w, objFactory)
 {
-    const fact = ECS.addEntity(w);
-    const acfact = objFactory
-    ECS.addComponent(w, fact, 'factory', acfact);
+    const ent = ECS.addEntity(w);
+    const fact = objFactory;
+    ECS.addComponent(w, ent, 'factory', fact);
 }
 
 function addPlayerEntity(w, objFactory, anims)
@@ -24,11 +47,12 @@ function addEntities(w, objFactory, anims)
     addPlayerEntity(w,objFactory,anims);
 }
 
-function addWorldUpdateEvents (w, input)
+function addWorldUpdateEvents (w, input, physicsWorld)
 {
     const ents = ECS.getEntities(w,['sprite']);
     input.on("pointerup", (e) => { jumpSpritesPos(ents);});
     input.on("pointerdown", (e) => { jumpSpritesAnim(ents);});
+    physicsWorld.on('collide', (go1,go2,b1,b2) => { killSpritesAnim(ents); });
 }
 
 function addSyncSystems(w)
@@ -54,7 +78,7 @@ class PlayerScene extends Scene
     {
         this.world  = ECS.addWorld()
         addEntities(this.world, this.physics.add, this.anims);
-        addWorldUpdateEvents(this.world, this.input);
+        addWorldUpdateEvents(this.world, this.input, this.physics.world);
         addSyncSystems(this.world);
         
     }

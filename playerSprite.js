@@ -28,6 +28,14 @@ function jumpSpritesAnim(sprites)
     });
 }
 
+function killSpritesAnim(sprites)
+{
+    sprites.forEach((sprite) =>
+    {
+        sprite.sprite.play({ key: "dead"});
+    });
+}
+
 
 //Components
 function addGhostSprite(objFactory, anims)
@@ -39,5 +47,5 @@ function addGhostSprite(objFactory, anims)
     return spr;
 }
 
-
-export { addGhostSprite, jumpSpritesAnim, jumpSpritesPos };
+//Exports
+export { killSpritesAnim,addGhostSprite, jumpSpritesAnim, jumpSpritesPos };
