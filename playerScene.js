@@ -1,51 +1,10 @@
 "use strict";
 import {Scene, GameObjects} from "phaser"
-import { addGhostSprite,killSpritesAnim, jumpSpritesAnim, jumpSpritesPos } from "./playerSprite.js"
+import { killSpritesAnim, jumpSpritesAnim, jumpSpritesPos } from "./playerSprite.js"
 import { spawnCastleSystem, moveCastleSystem, killCastleSystem } from "./castleSprite.js"
+import { addEntities, } from "./entities.js";
 import ECS from 'ecs'
-/*
-castle.body.setImmovable();
 
-
-
-    objFactory.collider(sprite, castle);
-
-
-    physicsWorld.on('collide', (go1, go2, b1, b2) =>
-
-
-    {
-
-
-        sprite.play({ key: "dead"});
-
-
-        sprite.body.setCollidesWith([]);
-
-
-        castle.setAlpha(0.5);
-
-
-    });*/
-function addObjFactory(w, objFactory)
-{
-    const ent = ECS.addEntity(w);
-    const fact = objFactory;
-    ECS.addComponent(w, ent, 'factory', fact);
-}
-
-function addPlayerEntity(w, objFactory, anims)
-{
-    const player = ECS.addEntity(w);
-    const spr = addGhostSprite(objFactory, anims);
-    ECS.addComponent(w, player, 'sprite', spr);
-}
-
-function addEntities(w, objFactory, anims)
-{
-    addObjFactory(w, objFactory);
-    addPlayerEntity(w,objFactory,anims);
-}
 
 function addWorldUpdateEvents (w, input, physicsWorld)
 {
