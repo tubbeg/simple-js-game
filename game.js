@@ -2,7 +2,6 @@
 import {Scene,Game, GameObjects, ANIMATION_STOP} from "phaser"
 import {createConfig} from "./config.js"
 import { PlayerScene } from "./playerScene.js";
-
 //simple is better
 
 const h = "hello";

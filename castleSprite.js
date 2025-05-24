@@ -2,7 +2,7 @@
 
 
 function castleIsOutOfBounds (castle){
-    return castle.inCamera && (castle.x < 600);
+    return (castle.inCamera) && (castle.x < 600);
 }
 
 

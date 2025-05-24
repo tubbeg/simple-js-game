@@ -1,19 +1,9 @@
 "use strict";
 import {Physics} from "phaser"
 
-//ghosts are technically always dead I suppose
-function ghostIsAlive (spr){
-    let data = spr.getData("alive");
-    return (data === "true");
-}
-
-
-
 function addGhostJump (sceneInput, sprite){
 
-    sprite.play({ key: "normal", repeat: -1 });
     //sprite.setInteractive();
-    sprite.body.onCollide = true;
     sceneInput.on("pointerup", (e) => { if (ghostIsAlive(sprite)) { sprite.setVelocityY(-200);}});
     sceneInput.on("pointerdown", (e) => {
         if (ghostIsAlive(sprite)){
@@ -27,12 +17,12 @@ function addGhostJump (sceneInput, sprite){
     });
 }
 
-function addGhostSprite(objFactory, anims, sceneInput){
-    
+function addGhostSprite(objFactory, anims)
+{
     anims.createFromAseprite("ghost");
     const spr = objFactory.sprite(400, 100, "ghost");
-    spr.setData("alive","true");
-    addGhostJump(sceneInput,spr);
+    spr.body.onCollide = true;
+    spr.play({ key: "normal", repeat: -1 });
     return spr;
 }
 

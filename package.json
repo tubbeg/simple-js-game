@@ -10,9 +10,11 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "ecs": "^0.23.0",
     "phaser": "^3.88.2"
   },
   "devDependencies": {
+    "typescript": "^5.8.3",
     "vite": "^6.3.5"
   }
 }

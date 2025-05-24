@@ -1,51 +1,54 @@
 "use strict";
-import {Scene, GameObjects, ANIMATION_STOP} from "phaser"
+import {Scene, GameObjects} from "phaser"
 import { addGhostSprite } from "./playerSprite.js";
 import { addCastle, castleIsOutOfBounds } from "./castleSprite.js";
+import ECS from 'ecs'
 
 
-function timeToUpdate (t)
+
+function addEntities(w, objFactory, anims, i)
 {
-    let d = t % 1000;
-    return (d < 1);
+    const player = ECS.addEntity(w)
+    const spr = addGhostSprite(objFactory, anims, i);
+    ECS.addComponent(w, player, 'sprite', spr);
+}
+
+function jumpSprites(sprites)
+{
+    sprites.forEach((sprite) => {
+        sprite.sprite.setVelocityY(-200);
+    });
+}
+
+
+function addWorldUpdateEvents (w, input)
+{
+    console.log("world is", w);
+    const ents = ECS.getEntities(w,['sprite']);
+    input.on("pointerup", (e) => { jumpSprites(ents);});
 }
 
 class PlayerScene extends Scene
 {
 
-
     preload ()
     {
         this.load.aseprite("ghost", "spookily.png", "spookily.json");
-        this.load.image("dark_castle", "happy_tower.png")
+        this.load.image("dark_castle", "happy_tower.png");
     }
 
     create ()
     {
-        this.towers = [];
-        this.sprite = addGhostSprite(this.physics.add, this.anims, this.input);
+        this.world  = ECS.addWorld()
+        addEntities(this.world, this.physics.add, this.anims);
+        //this.queries = addQueries(this.world);
+        addWorldUpdateEvents(this.world, this.input);
     }
 
-    update (t,dt)
-    {
-        this.towers.filter((tower) => {return (tower == null);});
-
-        this.towers.forEach((tower) =>
-        {
-            if (castleIsOutOfBounds(tower))
-            {
-                console.log("Destroying tower");
-                tower.destroy();
-            }
-        });
-
-        if (this.towers.length < 3 && timeToUpdate(t)){
-            console.log("towers,",this.towers)
-            console.log("Creating tower")
-            let newTower =  addCastle(this.physics.add, this.sprite, this.physics.world);
-            this.towers.push(newTower);
-        }
-
+    update (totalTime,dt)
+    {       
+        ECS.update(this.world, dt);
+        ECS.cleanup(this.world);
     }
 }
 
