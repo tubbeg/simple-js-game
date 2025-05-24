@@ -21,6 +21,7 @@ function addCastle2 (objFactory, sprite, physicsWorld){
 
 function addCastle (objFactory){
     const castle = objFactory.sprite(800,400, "dark_castle").setScale(3,3);
+    castle.body.setAllowGravity(false);
     return castle;
 }
 

@@ -11,7 +11,6 @@ function addObjFactory(w, objFactory)
     ECS.addComponent(w, fact, 'factory', acfact);
 }
 
-
 function addPlayerEntity(w, objFactory, anims)
 {
     const player = ECS.addEntity(w);
@@ -24,8 +23,6 @@ function addEntities(w, objFactory, anims)
     addObjFactory(w, objFactory);
     addPlayerEntity(w,objFactory,anims);
 }
-
-
 
 function addWorldUpdateEvents (w, input)
 {
@@ -46,8 +43,48 @@ function spawnCastleSystem (w)
             const tower = ECS.addEntity(w);
             const f = ECS.getEntity(w, [ 'factory' ]);
             const spr = addCastle(f.factory);
-            ECS.addComponent(w, tower, spr);
+            ECS.addComponent(w, tower, 'tower', spr);
+            ECS.addComponent(w, tower, 'moving', {moving : false});
         }   
+    }
+
+    return { onUpdate }
+}
+
+function killCastleSystem(w)
+{
+    const towers = ECS.getEntities(w, ['tower']);
+    const onUpdate = function (dt)
+    {
+        towers.forEach((entity) =>
+        {
+            const spr = entity.tower;
+            //console.log("spritex",spr.x);
+            if (spr.x < 50)
+            {
+                ECS.removeEntity(w, entity);
+                spr.destroy();
+            }
+        });
+    }
+
+    return { onUpdate }
+}
+
+function moveCastleSystem (w)
+{
+    const towers = ECS.getEntities(w, ['tower', 'moving']);
+    console.log("nr of towers", towers);
+    const onUpdate = function (dt)
+    {
+        for (const entity of towers)
+        {
+            if (!entity.moving.moving)
+            {
+                entity.tower.setVelocityX(-100);
+                entity.moving = true;
+            }
+        }
     }
 
     return { onUpdate }
@@ -56,6 +93,8 @@ function spawnCastleSystem (w)
 function addSyncSystems(w)
 {
     ECS.addSystem(w, spawnCastleSystem);
+    ECS.addSystem(w, moveCastleSystem);
+    ECS.addSystem(w, killCastleSystem);
 }
 
 

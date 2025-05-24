@@ -4,7 +4,8 @@ import {Physics} from "phaser"
 //Systems
 function jumpSpritesPos(sprites)
 {
-    sprites.forEach((sprite) => {
+    sprites.forEach((sprite) =>
+    {
         sprite.sprite.setVelocityY(-200);
     });
 }
@@ -17,12 +18,12 @@ function playJump (sprite)
         {
             sprite.play({ key: "normal", repeat: -1 });
         });
-        
 }
 
 function jumpSpritesAnim(sprites)
 {
-    sprites.forEach((sprite) => {
+    sprites.forEach((sprite) =>
+    {
         playJump(sprite.sprite);
     });
 }
