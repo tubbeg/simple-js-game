@@ -1,17 +1,17 @@
 "use strict";
-import {Scene, GameObjects} from "phaser"
-import { killSpritesAnim, jumpSpritesAnim, jumpSpritesPos } from "./playerSprite.js"
+import {Scene} from "phaser"
+import { killSprites, jumpSpritesAnim, jumpSpritesPos } from "./playerSprite.js"
 import { spawnCastleSystem, moveCastleSystem, killCastleSystem } from "./castleSprite.js"
-import { addEntities, } from "./entities.js";
+import { addEntities } from "./entities.js"
 import ECS from 'ecs'
 
 
 function addWorldUpdateEvents (w, input, physicsWorld)
 {
-    const ents = ECS.getEntities(w,['sprite']);
+    const ents = ECS.getEntities(w,['sprite', 'alive']);
     input.on("pointerup", (e) => { jumpSpritesPos(ents);});
     input.on("pointerdown", (e) => { jumpSpritesAnim(ents);});
-    physicsWorld.on('collide', (go1,go2,b1,b2) => { killSpritesAnim(ents); });
+    physicsWorld.on('collide', (go1,go2,b1,b2) => { killSprites(w,ents); });
 }
 
 function addSyncSystems(w)
@@ -35,7 +35,7 @@ class PlayerScene extends Scene
 
     create ()
     {
-        this.world  = ECS.addWorld()
+        this.world = ECS.addWorld()
         addEntities(this.world, this.physics.add, this.anims);
         addWorldUpdateEvents(this.world, this.input, this.physics.world);
         addSyncSystems(this.world);

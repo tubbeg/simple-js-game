@@ -1,5 +1,7 @@
 "use strict";
 import {Physics} from "phaser"
+import ECS from 'ecs'
+
 
 //Systems
 function jumpSpritesPos(sprites)
@@ -28,14 +30,15 @@ function jumpSpritesAnim(sprites)
     });
 }
 
-function killSpritesAnim(sprites)
+function killSprites(w,sprites)
 {
     sprites.forEach((sprite) =>
     {
         sprite.sprite.play({ key: "dead"});
+        ECS.removeComponent(w, sprite, 'alive');
+        ECS.addComponent(w, sprite, 'dead');
     });
 }
-
 
 //Components
 function addGhostSprite(objFactory, anims)
@@ -48,4 +51,4 @@ function addGhostSprite(objFactory, anims)
 }
 
 //Exports
-export { killSpritesAnim,addGhostSprite, jumpSpritesAnim, jumpSpritesPos };
+export { killSprites,addGhostSprite, jumpSpritesAnim, jumpSpritesPos };

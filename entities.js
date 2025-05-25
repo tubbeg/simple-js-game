@@ -14,6 +14,7 @@ function addPlayerEntity(w, objFactory, anims)
     const player = ECS.addEntity(w);
     const spr = addGhostSprite(objFactory, anims);
     ECS.addComponent(w, player, 'sprite', spr);
+    ECS.addComponent(w, player, 'alive', {})
 }
 
 function addEntities(w, objFactory, anims)
