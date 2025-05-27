@@ -9,15 +9,33 @@ function getShurikenPos()
     return Math.floor(r);
 }
 
+function diffToSpeed(diff)
+{
+    if (diff == "medium")
+    {
+        return -250;
+    }
+    if (diff == "hard")
+    {
+        return -500;
+    }
+    if (diff == "impossible")
+    {
+        return -1000;
+    }
+    return -100;
+}
+
 //Components
-function addShuriken (objFactory)
+function addShuriken (objFactory,diff)
 {
     const y = getShurikenPos();
+    const d = diffToSpeed(diff);
     const s = objFactory.sprite(800,y, "shuriken");
     s.setSize(30,40,true);
     s.body.setAllowGravity(false);
     s.body.setImmovable();
-    s.setVelocityX(-100);
+    s.setVelocityX(d);
     return s;
 }
 
@@ -80,13 +98,14 @@ function rotateShurikenSystem (w)
 function spawnShurikenSystem (w)
 {
     const player = ECS.getEntity(w, [ 'sprite']);
+    const d = ECS.getEntity(w, [ 'diff']);
     const onUpdate = function (dt)
     {
         if (okToSpawnEnemy(w))
         {
             const e = ECS.addEntity(w);
             const f = ECS.getEntity(w, [ 'factory' ]);
-            const spr = addShuriken(f.factory);
+            const spr = addShuriken(f.factory,d.diff);
             f.factory.collider(spr, player.sprite);
             ECS.addComponent(w, e, 'shuriken', spr);
             ECS.addComponent(w, e, 'moving', {moving : false});

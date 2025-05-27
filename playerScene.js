@@ -5,6 +5,8 @@ import { addEntities } from "./entities.js"
 import {removeShurikenSystem,rotateShurikenSystem, spawnShurikenSystem} from "./enemy.js"
 import ECS from 'ecs'
 import { killCloudSystem, spawnCloudSystem } from "./environment.js";
+import { countTimeSystem, difficultySystem } from "./difficulty.js";
+import { scoreSystem } from "./score.js";
 
 function addWorldUpdateEvents (w, input, physicsWorld)
 {
@@ -26,6 +28,9 @@ function addSyncSystems(w)
     ECS.addSystem(w, rotateShurikenSystem);
     ECS.addSystem(w, spawnCloudSystem);
     ECS.addSystem(w, killCloudSystem);
+    ECS.addSystem(w, countTimeSystem);
+    ECS.addSystem(w, difficultySystem);
+    ECS.addSystem(w, scoreSystem);
 }
 
 
@@ -41,15 +46,15 @@ class PlayerScene extends Scene
         this.load.image("shuriken", "shuriken.png");
         this.load.image("moon", "moon.png");
         this.load.image("cloud", "evil-cloud.png");
+        
     }
 
     create ()
     {
         this.anims.createFromAseprite("ghost");
         this.add.image(200,100,"moon");
-        
         this.world = ECS.addWorld()
-        addEntities(this.world, this.physics.add, this.anims);
+        addEntities(this.world, this.physics.add, this.anims, this.add);
         addWorldUpdateEvents(this.world, this.input, this.physics.world);
         addSyncSystems(this.world);
         
