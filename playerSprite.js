@@ -3,7 +3,7 @@ import ECS from 'ecs'
 
 
 //Systems
-function jumpSpritesPos(sprites)
+function jumpSpritesPos (sprites)
 {
     sprites.forEach((sprite) =>
     {
@@ -21,7 +21,7 @@ function playJump (sprite)
         });
 }
 
-function jumpSpritesAnim(sprites)
+function jumpSpritesAnim (sprites)
 {
     sprites.forEach((sprite) =>
     {
@@ -29,7 +29,7 @@ function jumpSpritesAnim(sprites)
     });
 }
 
-function killAnimationSystem(w)
+function killAnimationSystem (w)
 {
 
     const ents = ECS.getEntities(w,['sprite', 'dead']);
@@ -44,7 +44,7 @@ function killAnimationSystem(w)
 }
 
 
-function killSprites(w,sprites)
+function killSprites (w,sprites)
 {
     sprites.forEach((sprite) =>
     {
@@ -61,14 +61,14 @@ function jumpSpritesSystem (w,input)
     input.on("pointerdown", (e) => { jumpSpritesAnim(ents);});
 }
 
-function collideSystem(w, physicsWorld)
+function collideSystem (w, physicsWorld)
 {
     const ents = ECS.getEntities(w,['sprite', 'alive']);
     physicsWorld.on('collide', (go1,go2,b1,b2) => { killSprites(w,ents); });
 }
 
 
-function pitKillSystem(w)
+function pitKillSystem (w)
 {
 
     const ents = ECS.getEntities(w,['sprite', 'alive']);
@@ -87,11 +87,13 @@ function pitKillSystem(w)
 }
 
 
+
 //Components
-function addGhostSprite(objFactory, anims)
+function addGhostSprite (objFactory, anims)
 {
     const spr = objFactory.sprite(400, 100, "ghost");
     spr.body.onCollide = true;
+    spr.setSize(35,75,true);
     spr.play({ key: "normal", repeat: -1 });
     return spr;
 }

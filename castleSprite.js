@@ -5,15 +5,15 @@ function getRandTower()
 {
     const m = 600;
     const r = Math.random() * m;
-    const roundR = Math.floor(r);
-    return roundR;
+    return Math.floor(r);
 }
 
 //Components
-function addTower (objFactory){
-    //const castle = objFactory.sprite(800,400, "tower").setScale(3,3);
+function addTower (objFactory)
+{
     const s = getRandTower();
     const castle = objFactory.sprite(800,s, "tower");
+    castle.setSize(10,10,true);
     //Not all properties need to be added as components
     //Some things are better to be left for Phaser to handle
     castle.body.setAllowGravity(false);
@@ -25,9 +25,9 @@ function okToSpawnTower(w)
 {
     const ents = ECS.getEntities(w, [ 'tower']);
     let r = true;
-    ents.forEach((enttity) =>
+    ents.forEach((entity) =>
     {
-        const spr = enttity.tower;
+        const spr = entity.tower;
         if (spr.x > 400)
         {
             r = false;
@@ -39,11 +39,9 @@ function okToSpawnTower(w)
 //Systems
 function spawnCastleSystem (w)
 {
-    //const ents = ECS.getEntities(w, [ 'tower']);
     const player = ECS.getEntity(w, [ 'sprite']);
     const onUpdate = function (dt)
     {
-        //if (ents.length < 1)
         if (okToSpawnTower(w))
         {
             const tower = ECS.addEntity(w);
