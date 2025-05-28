@@ -20,4 +20,4 @@ function scoreSystem(w)
 
 export {scoreSystem}
 
-//this.add.text(400, 8, 'Score', { font: '16px Courier', fill: '#00ff00' }).setOrigin(0.5, 0).setScale(3);
+

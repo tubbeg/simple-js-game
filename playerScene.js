@@ -36,6 +36,10 @@ function addSyncSystems(w)
 
 class PlayerScene extends Scene
 {
+    constructor()
+    {
+        super({key : "main"});
+    }
 
     preload ()
     {
